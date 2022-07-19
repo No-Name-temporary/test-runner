@@ -1,0 +1,57 @@
+name: Deploy Test Runner Lambda
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  deploy_lambda:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      - name: npm install
+        env: 
+          CI: true
+        run: |
+          npm ci
+      - name: Configure AWS Credentials us-east-1
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: deploy us-east-1
+        run: |
+          zip -r test-route-packager.zip .
+          aws lambda update-function-code --function-name=test-route-packager --zip-file=fileb://test-route-packager.zip 
+      - name: Configure AWS Credentials us-west-1
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+      - name: deploy us-west-1
+        run: |
+          aws lambda update-function-code --function-name=test-route-packager --zip-file=fileb://test-route-packager.zip 
+      - name: Configure AWS Credentials ca-central-1
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
+      - name: deploy ca-central-1
+        run: |
+          aws lambda update-function-code --function-name=test-route-packager --zip-file=fileb://test-route-packager.zip 
+      - name: Configure AWS Credentials eu-north-1
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+      - name: deploy eu-north-1
+        run: |
+          aws lambda update-function-code --function-name=test-route-packager --zip-file=fileb://test-route-packager.zip 
