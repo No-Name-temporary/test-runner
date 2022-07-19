@@ -26,8 +26,8 @@ jobs:
           aws-region: us-east-1
       - name: deploy us-east-1
         run: |
-          zip -r test-route-packager.zip .
-          aws lambda update-function-code --function-name=test-route-packager --zip-file=fileb://test-route-packager.zip 
+          zip -r test-runner.zip .
+          aws lambda update-function-code --function-name=test-runner --zip-file=fileb://test-runner.zip 
       - name: Configure AWS Credentials us-west-1
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -36,7 +36,7 @@ jobs:
           aws-region: us-west-1
       - name: deploy us-west-1
         run: |
-          aws lambda update-function-code --function-name=test-route-packager --zip-file=fileb://test-route-packager.zip 
+          aws lambda update-function-code --function-name=test-runner --zip-file=fileb://test-runner.zip 
       - name: Configure AWS Credentials ca-central-1
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -45,7 +45,7 @@ jobs:
           aws-region: ca-central-1
       - name: deploy ca-central-1
         run: |
-          aws lambda update-function-code --function-name=test-route-packager --zip-file=fileb://test-route-packager.zip 
+          aws lambda update-function-code --function-name=test-runner --zip-file=fileb://test-runner.zip 
       - name: Configure AWS Credentials eu-north-1
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -54,4 +54,4 @@ jobs:
           aws-region: eu-north-1
       - name: deploy eu-north-1
         run: |
-          aws lambda update-function-code --function-name=test-route-packager --zip-file=fileb://test-route-packager.zip 
+          aws lambda update-function-code --function-name=test-runner --zip-file=fileb://test-runner.zip 
