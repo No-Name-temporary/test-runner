@@ -15,7 +15,7 @@ exports.handler = async (event) => {
   const testRunner = new TestRunner(testConfiguration);
 
   const results = await testRunner.run();
-	console.log('SHAPE OF RESULT ------>', result);
+  console.log('SHAPE OF RESULTS ------>', results);
   const response = {
     title: test.title,
     sender: currRegion,
