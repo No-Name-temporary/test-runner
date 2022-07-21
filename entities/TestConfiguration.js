@@ -52,15 +52,20 @@ class TestConfiguration {
           let assertionHeaders = this.assertions[assertionType];
           let responseHeaders = response.headers;
           comparisonType = this.assertions[assertionType].comparison;
-          
-          assertionHeaders.forEach(assertionHeader => {
             
+          assertionHeaders.forEach(assertionHeader => {
+            console.log("comparisonType ====>>", comparisonType);
+						
             success = TestConfiguration.checkHeaders(assertionHeader, responseHeaders, comparisonType);
+						console.log("success ====>>>", success);
             targetValue = assertionHeader.target;
             actualValue = response.headers[assertionHeader.property] || null;
             comparisonType = assertionHeader.comparison;
             property = assertionHeader.property;
-
+            
+						console.log("push =======> ", {
+              assertionType, targetValue, actualValue, comparisonType, property, success,
+            });
             results.push({
               assertionType, targetValue, actualValue, comparisonType, property, success,
             });
@@ -119,6 +124,8 @@ class TestConfiguration {
         result = responseHeaders[assertionHeader.property] !== assertionHeader.target;
         break;
       case 'equal_to':
+				console.log("responseHeaders[assertionHeader.property]====> ", responseHeaders[assertionHeader.property]);
+				console.log("assertionHeader.target=====> ", assertionHeader.target);
         result = responseHeaders[assertionHeader.property] === assertionHeader.target;
         break;
         case 'contains':
@@ -134,6 +141,7 @@ class TestConfiguration {
           result = Number(responseHeaders[header.property]) <= Number(assertionHeader.target); 
           break 
       default:
+				console.log("default =======> ", result);
         result = false;
     }
     return result;
