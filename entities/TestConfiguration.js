@@ -7,8 +7,6 @@ class TestConfiguration {
     this.url = httpRequest.url;
     this.body = httpRequest.body;
     this.assertions = httpRequest.assertions;
-
-		console.log('httpRequest.assertions ===> ', httpRequest.assertions);
   }
 
   checkAssertions(response) {
@@ -54,11 +52,6 @@ class TestConfiguration {
           let assertionHeaders = this.assertions[assertionType];
           let responseHeaders = response.headers;
           comparisonType = this.assertions[assertionType].comparison;
-
-					console.log('this ======>>>', this);
-					console.log('this assertion type ===>>>', this.assertions);
-					console.log('assertion headers ====>>>', assertionHeaders);
-					console.log('assertion headers with dot=====>', this.assertions.headers);
           
           assertionHeaders.forEach(assertionHeader => {
             
