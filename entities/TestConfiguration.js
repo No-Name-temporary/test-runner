@@ -51,10 +51,11 @@ class TestConfiguration {
         case 'headers':
           let assertionHeaders = this.assertions[assertionType];
           let responseHeaders = response.headers;
-          comparisonType = this.assertions[assertionType].comparison;
             
           assertionHeaders.forEach(assertionHeader => {
-            console.log("comparisonType ====>>", comparisonType);
+						comparisonType = assertionHeader.comparison;
+
+						console.log("comparisonType ====>>", comparisonType);
 						
             success = TestConfiguration.checkHeaders(assertionHeader, responseHeaders, comparisonType);
 						console.log("success ====>>>", success);
