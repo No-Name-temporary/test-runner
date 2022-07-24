@@ -6,7 +6,7 @@ function sendMsgToSQS(response) {
   const params = {
     MessageBody: JSON.stringify(response),
 
-    QueueUrl: 'https://sqs.us-east-1.amazonaws.com/082057163641/test-result-collector-Q',
+    // QueueUrl: 'https://sqs.us-east-1.amazonaws.com/082057163641/test-result-collector-Q',
   };
 
   console.log('final params --> ', params);
