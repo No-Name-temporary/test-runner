@@ -190,10 +190,26 @@ class TestConfiguration {
         result = actualValue === targetValue;
         break;
       case 'contains':
-        result = helpers.containsKeysOrVals(actualValue, targetValue);
+        if (typeof actualValue === 'boolean') {
+          result = actualValue === targetValue;
+        } else if (!actualValue || typeof actualValue === 'number') {
+          result = false;
+        } else if (typeof actualValue === 'string') {
+          result = actualValue.includes(targetValue);
+        } else {
+          result = helpers.containsKeysOrVals(actualValue, targetValue);
+        }
         break;
       case 'not_contains':
-        result = !helpers.containsKeysOrVals(actualValue, targetValue);
+        if (typeof actualValue === 'boolean') {
+          result = actualValue !== targetValue;
+        } else if (!actualValue || typeof actualValue === 'number') {
+          result = false;
+        } else if (typeof actualValue === 'string') {
+          result = !actualValue.includes(targetValue);
+        } else {
+          result = !helpers.containsKeysOrVals(actualValue, targetValue);
+        }
         break;
       case 'greater_than_or_equal_to':
         actualValue = Number(actualValue);
