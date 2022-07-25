@@ -14,12 +14,19 @@ exports.handler = async (event) => {
   const testConfiguration = new TestConfiguration(test);
   const testRunner = new TestRunner(testConfiguration);
 
-  const results = await testRunner.run();
+  const {
+    status, data, headers, results,
+  } = await testRunner.run();
+
   console.log('SHAPE OF RESULTS ------>', results);
+
   const response = {
     title: test.title,
     sender: currRegion,
     timestamp: getTimestamp(),
+    responseStatus: status,
+    responseBody: data,
+    responseHeaders: headers,
     results,
   };
 
