@@ -21,18 +21,16 @@ class TestConfiguration {
     let comparisonType;
     let property;
     let success;
-    let assertionHeaders;
     let responseHeaders;
-    let bodyAssertions;
 
-    const assertionTypes = Object.keys(this.assertions);
-    for (let i = 0; i < assertionTypes.length; i += 1) {
-      const assertionType = assertionTypes[i];
+    for (let i = 0; i < this.assertions.length; i += 1) {
+      const assertion = this.assertions[i];
+      const assertionType = this.assertions[i].type;
       switch (assertionType) {
         case 'statusCode':
-          targetValue = this.assertions[assertionType].target;
+          targetValue = assertion.target;
           actualValue = response.status;
-          comparisonType = this.assertions[assertionType].comparison;
+          comparisonType = assertion.comparison;
           property = null;
 
           success = TestConfiguration.checkResTimeOrStatusCode({
@@ -44,9 +42,9 @@ class TestConfiguration {
 
           break;
         case 'responseTime':
-          targetValue = this.assertions[assertionType].target;
+          targetValue = assertion.target;
           actualValue = response.headers['request-duration'];
-          comparisonType = this.assertions[assertionType].comparison;
+          comparisonType = assertion.comparison;
           property = null;
 
           success = TestConfiguration.checkResTimeOrStatusCode({
@@ -56,28 +54,21 @@ class TestConfiguration {
             assertionType, targetValue, actualValue, comparisonType, property, success,
           });
           break;
-        case 'headers':
-          assertionHeaders = this.assertions[assertionType];
+        case 'header':
           responseHeaders = response.headers;
+          comparisonType = assertion.comparison;
+          targetValue = assertion.target;
+          property = assertion.property; 
 
-          assertionHeaders.forEach((assertionHeader) => {
-            comparisonType = assertionHeader.comparison;
+          success = TestConfiguration
+            .checkHeaders(assertion, responseHeaders, comparisonType);
+          actualValue = response.headers[property] || null;
 
-            success = TestConfiguration
-              .checkHeaders(assertionHeader, responseHeaders, comparisonType);
-            targetValue = assertionHeader.target;
-            actualValue = response.headers[assertionHeader.property] || null;
-            comparisonType = assertionHeader.comparison;
-            property = assertionHeader.property;
-
-            results.push({
-              assertionType, targetValue, actualValue, comparisonType, property, success,
-            });
+          results.push({
+            assertionType, targetValue, actualValue, comparisonType, property, success,
           });
           break;
-        case 'jsonBody':
-          bodyAssertions = this.assertions[assertionType];
-          bodyAssertions.forEach((assertion) => {
+        case 'jsonBody':	
             targetValue = assertion.target || null;
             property = assertion.property[0] !== '$' ? `$.${assertion.property}` : assertion.property;
             comparisonType = assertion.comparison;
@@ -87,13 +78,17 @@ class TestConfiguration {
               success = false;
             } else {
               const responseBody = response.data;
-              actualValue = property ? helpers.getValue(responseBody, property) : responseBody;
+              actualValue = property != "$." ? helpers.getValue(responseBody, property) : responseBody;
               success = TestConfiguration.checkJsonBody(targetValue, actualValue, comparisonType);
+            }
+
+            if (typeof actualValue === 'object' || Array.isArray(actualValue)) {
+              actualValue = `First 300 char:${JSON.stringify(actualValue).slice(0, 200)}...`;
+              property = null; 
             }
             results.push({
               assertionType, targetValue, actualValue, comparisonType, property, success,
             });
-          });
 
           break;
         default:
@@ -113,21 +108,21 @@ class TestConfiguration {
     let result;
 
     switch (comparisonType) {
-      case 'less_than':
+      case 'lessThan':
         actualValue = Number(actualValue);
         result = actualValue < targetValue;
         break;
-      case 'greater_than':
+      case 'greaterThan':
         actualValue = Number(actualValue);
         result = actualValue > targetValue;
         break;
-      case 'not_equal_to':
+      case 'notEqualTo':
         actualValue = String(actualValue);
-        result = actualValue !== targetValue;
+        result = actualValue !== String(targetValue);
         break;
-      case 'equal_to':
+      case 'equalTo':
         actualValue = String(actualValue);
-        result = actualValue === targetValue;
+        result = actualValue === String(targetValue);
         break;
       default:
         result = false;
@@ -135,35 +130,35 @@ class TestConfiguration {
     return result;
   }
 
-  static checkHeaders(assertionHeader, responseHeaders, comparisonType) {
+  static checkHeaders(assertion, responseHeaders, comparisonType) {
     let result;
 
     switch (comparisonType) {
-      case 'less_than':
-        result = Number(responseHeaders[assertionHeader.property]) < Number(assertionHeader.target);
+      case 'lessThan':
+        result = Number(responseHeaders[assertion.property]) < Number(assertion.target);
         break;
-      case 'greater_than':
-        result = Number(responseHeaders[assertionHeader.property]) > Number(assertionHeader.target);
+      case 'greaterThan':
+        result = Number(responseHeaders[assertion.property]) > Number(assertion.target);
         break;
-      case 'not_equal_to':
-        result = responseHeaders[assertionHeader.property] !== assertionHeader.target;
+      case 'notEqualTo':
+        result = responseHeaders[assertion.property] !== assertion.target;
         break;
-      case 'equal_to':
-        result = responseHeaders[assertionHeader.property] === assertionHeader.target;
+      case 'equalTo':
+        result = responseHeaders[assertion.property] === assertion.target;
         break;
       case 'contains':
-        result = responseHeaders[assertionHeader.property].includes(assertionHeader.target);
+        result = responseHeaders[assertion.property].includes(assertion.target);
         break;
-      case 'not_contains':
-        result = !responseHeaders[assertionHeader.property].includes(assertionHeader.target);
+      case 'notContains':
+        result = !responseHeaders[assertion.property].includes(assertion.target);
         break;
-      case 'greater_than_or_equal_to':
-        result = Number(responseHeaders[assertionHeader.property])
-        >= Number(assertionHeader.target);
+      case 'greaterThanOrEqualTo':
+        result = Number(responseHeaders[assertion.property])
+        >= Number(assertion.target);
         break;
-      case 'less_than_or_equal_to':
-        result = Number(responseHeaders[assertionHeader.property])
-        <= Number(assertionHeader.target);
+      case 'lessThanOrEqualTo':
+        result = Number(responseHeaders[assertion.property])
+        <= Number(assertion.target);
         break;
       default:
         result = false;
@@ -175,18 +170,18 @@ class TestConfiguration {
     let result;
 
     switch (comparisonType) {
-      case 'less_than':
+      case 'lessThan':
         actualValue = Number(actualValue);
         result = actualValue < targetValue;
         break;
-      case 'greater_than':
+      case 'greaterThan':
         actualValue = Number(actualValue);
         result = actualValue > targetValue;
         break;
-      case 'not_equal_to':
+      case 'notEqualTo':
         result = actualValue !== targetValue;
         break;
-      case 'equal_to':
+      case 'equalTo':
         result = actualValue === targetValue;
         break;
       case 'contains':
@@ -200,7 +195,7 @@ class TestConfiguration {
           result = helpers.containsKeysOrVals(actualValue, targetValue);
         }
         break;
-      case 'not_contains':
+      case 'notContains':
         if (typeof actualValue === 'boolean') {
           result = actualValue !== targetValue;
         } else if (!actualValue || typeof actualValue === 'number') {
@@ -211,27 +206,27 @@ class TestConfiguration {
           result = !helpers.containsKeysOrVals(actualValue, targetValue);
         }
         break;
-      case 'greater_than_or_equal_to':
+      case 'greaterThanOrEqualTo':
         actualValue = Number(actualValue);
         result = actualValue >= targetValue;
         break;
-      case 'less_than_or_equal_to':
+      case 'lessThanOrEqualTo':
         actualValue = Number(actualValue);
         result = actualValue <= targetValue;
         break;
-      case 'has_key':
+      case 'hasKey':
         result = helpers.hasKeys(actualValue, targetValue);
         break;
-      case 'not_has_key':
+      case 'notHasKey':
         result = !helpers.hasKeys(actualValue, targetValue);
         break;
-      case 'has_value':
+      case 'hasValue':
         result = helpers.hasValues(actualValue, targetValue);
         break;
-      case 'not_has_value':
+      case 'notHasValue':
         result = helpers.hasValues(actualValue, targetValue);
         break;
-      case 'is_empty':
+      case 'isEmpty':
         if (Array.isArray(actualValue)) {
           result = actualValue.length === 0;
         } else if (actualValue === null) {
@@ -242,7 +237,7 @@ class TestConfiguration {
           result = String(actualValue) === '';
         }
         break;
-      case 'is_not_empty':
+      case 'isNotEmpty':
         if (Array.isArray(actualValue)) {
           result = actualValue.length !== 0;
         } else if (actualValue === null) {
@@ -253,10 +248,10 @@ class TestConfiguration {
           result = String(actualValue) === '';
         }
         break;
-      case 'is_null':
+      case 'isNull':
         result = actualValue === null;
         break;
-      case 'is_not_null':
+      case 'isNotNull':
         result = actualValue !== null;
         break;
       default:
