@@ -68,7 +68,7 @@ class TestConfiguration {
             assertionType, targetValue, actualValue, comparisonType, property, success,
           });
           break;
-        case 'jsonBody':	
+        case 'body':	
             targetValue = assertion.target || null;
             property = assertion.property[0] !== '$' ? `$.${assertion.property}` : assertion.property;
             comparisonType = assertion.comparison;
