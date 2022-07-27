@@ -50,11 +50,11 @@ const getValue = (responseBody, property) => {
 const isObjectEmpty = (obj) => Object.keys(obj).length === 0;
 
 const formatProperty = (property) => {
-	if (property === null) {
+  if (property === null) {
     return '$.'
-	} else {
+  } else {
     return assertion.property[0] !== '$' ? `$.${assertion.property}` : assertion.property;
-	}
+  }
 }; 
 
 module.exports = {

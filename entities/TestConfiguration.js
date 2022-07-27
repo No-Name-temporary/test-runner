@@ -70,7 +70,7 @@ class TestConfiguration {
           break;
         case 'body':	
             targetValue = assertion.target || null;
-						property = helpers.formatProperty(assertion.property); 
+            property = helpers.formatProperty(assertion.property); 
             comparisonType = assertion.comparison;
             actualValue = null;
 
