@@ -70,7 +70,7 @@ class TestConfiguration {
           break;
         case 'body':	
             targetValue = assertion.target || null;
-            property = assertion.property[0] !== '$' ? `$.${assertion.property}` : assertion.property;
+						property = helpers.formatProperty(assertion.property); 
             comparisonType = assertion.comparison;
             actualValue = null;
 
@@ -83,9 +83,10 @@ class TestConfiguration {
             }
 
             if (typeof actualValue === 'object' || Array.isArray(actualValue)) {
-              actualValue = `First 300 char:${JSON.stringify(actualValue).slice(0, 200)}...`;
-              property = null; 
+              actualValue = actualValue;
+              property = property === '$.' ? null : property; 
             }
+
             results.push({
               assertionType, targetValue, actualValue, comparisonType, property, success,
             });
