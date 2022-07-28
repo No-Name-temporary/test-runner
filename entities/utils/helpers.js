@@ -53,7 +53,7 @@ const formatProperty = (property) => {
   if (property === null) {
     return '$.'
   } else {
-    return assertion.property[0] !== '$' ? `$.${assertion.property}` : assertion.property;
+    return property[0] !== '$' ? `$.${property}` : property;
   }
 }; 
 
