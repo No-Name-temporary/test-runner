@@ -54,11 +54,11 @@ class TestConfiguration {
             assertionType, targetValue, actualValue, comparisonType, property, success,
           });
           break;
-        case 'header':
+        case 'headers':
           responseHeaders = response.headers;
           comparisonType = assertion.comparison;
           targetValue = assertion.target;
-          property = assertion.property; 
+          property = assertion.property;
 
           success = TestConfiguration
             .checkHeaders(assertion, responseHeaders, comparisonType);
@@ -68,28 +68,28 @@ class TestConfiguration {
             assertionType, targetValue, actualValue, comparisonType, property, success,
           });
           break;
-        case 'body':	
-            targetValue = assertion.target || null;
-            property = helpers.formatProperty(assertion.property); 
-            comparisonType = assertion.comparison;
-            actualValue = null;
+        case 'body':
+          targetValue = assertion.target || null;
+          property = helpers.formatProperty(assertion.property);
+          comparisonType = assertion.comparison;
+          actualValue = null;
 
-            if ((!response.data) || (!Array.isArray(response.data) && typeof response.data !== 'object')) {
-              success = false;
-            } else {
-              const responseBody = response.data;
-              actualValue = property != "$." ? helpers.getValue(responseBody, property) : responseBody;
-              success = TestConfiguration.checkJsonBody(targetValue, actualValue, comparisonType);
-            }
+          if ((!response.data) || (!Array.isArray(response.data) && typeof response.data !== 'object')) {
+            success = false;
+          } else {
+            const responseBody = response.data;
+            actualValue = property !== '$.' ? helpers.getValue(responseBody, property) : responseBody;
+            success = TestConfiguration.checkJsonBody(targetValue, actualValue, comparisonType);
+          }
 
-            if (typeof actualValue === 'object' || Array.isArray(actualValue)) {
-              actualValue = actualValue;
-              property = property === '$.' ? null : property; 
-            }
+          if (typeof actualValue === 'object' || Array.isArray(actualValue)) {
+            actualValue = actualValue;
+            property = property === '$.' ? null : property;
+          }
 
-            results.push({
-              assertionType, targetValue, actualValue, comparisonType, property, success,
-            });
+          results.push({
+            assertionType, targetValue, actualValue, comparisonType, property, success,
+          });
 
           break;
         default:
