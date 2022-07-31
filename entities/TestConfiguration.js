@@ -25,6 +25,7 @@ class TestConfiguration {
 
     for (let i = 0; i < this.assertions.length; i += 1) {
       const assertion = this.assertions[i];
+      const { id: assertionId } = assertion;
       const assertionType = this.assertions[i].type;
       switch (assertionType) {
         case 'statusCode':
@@ -37,7 +38,7 @@ class TestConfiguration {
             targetValue, actualValue, comparisonType,
           });
           results.push({
-            assertionType, targetValue, actualValue, comparisonType, property, success,
+            assertionId, assertionType, targetValue, actualValue, comparisonType, property, success,
           });
 
           break;
@@ -51,7 +52,7 @@ class TestConfiguration {
             targetValue, actualValue, comparisonType,
           });
           results.push({
-            assertionType, targetValue, actualValue, comparisonType, property, success,
+            assertionId, assertionType, targetValue, actualValue, comparisonType, property, success,
           });
           break;
         case 'header':
@@ -65,7 +66,7 @@ class TestConfiguration {
           actualValue = response.headers[property] || null;
 
           results.push({
-            assertionType, targetValue, actualValue, comparisonType, property, success,
+            assertionId, assertionType, targetValue, actualValue, comparisonType, property, success,
           });
           break;
         case 'body':
@@ -88,12 +89,13 @@ class TestConfiguration {
           }
 
           results.push({
-            assertionType, targetValue, actualValue, comparisonType, property, success,
+            assertionId, assertionType, targetValue, actualValue, comparisonType, property, success,
           });
 
           break;
         default:
           results.push({
+            assertionId,
             assertionType,
             targetValue: this.assertions[assertionType],
             actualValue: null,
