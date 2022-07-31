@@ -54,7 +54,7 @@ class TestConfiguration {
             assertionType, targetValue, actualValue, comparisonType, property, success,
           });
           break;
-        case 'headers':
+        case 'header':
           responseHeaders = response.headers;
           comparisonType = assertion.comparison;
           targetValue = assertion.target;
