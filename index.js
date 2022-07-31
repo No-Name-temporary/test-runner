@@ -8,6 +8,7 @@ exports.handler = async (event) => {
   const currRegion = event.Records[0].awsRegion;
   const { test } = JSON.parse(body.Message);
   console.log(`...starting test runner in ${currRegion}...`);
+  console.log(`SHAPE OF EVENT --> `, event)
   console.log('SHAPE OF TEST ---> ', test);
 
   const testConfiguration = new TestConfiguration(test);
