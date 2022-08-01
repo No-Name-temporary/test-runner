@@ -1,7 +1,7 @@
 const TestConfiguration = require('../entities/TestConfiguration');
 
 const response = require('./response.json');
-const testJson  = require('./test.json'); 
+const testJson  = require('./test.json');
 
 const testConfiguration = new TestConfiguration(testJson.test);
 const results = testConfiguration.checkAssertions(response);
@@ -66,7 +66,7 @@ describe('Response Time', () => {
     const data = {
       targetValue: '570',
       actualValue: 570,
-      comparisonType: 'lessThan'
+      comparisonType: 'lessThan',
     }
     expect(TestConfiguration.checkResTimeOrStatusCode(data)).toBe(false);
     });

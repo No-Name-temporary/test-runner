@@ -1,9 +1,9 @@
 const containsKeysOrVals = (value, target) => {
   if (Array.isArray(value) && value.length === 0 ||
-	isObjectEmpty(value)
-	) {
-		return false; 
-	}
+  isObjectEmpty(value)
+  ) {
+    return false; 
+  }
 
   if (Array.isArray(value)) {
     return value.some((val) => containsKeysOrVals(val, target));
@@ -19,11 +19,11 @@ const containsKeysOrVals = (value, target) => {
 };
 
 const hasKeys = (value, target) => {
-	if (Array.isArray(value) && value.length === 0 ||
-	isObjectEmpty(value) || !Array.isArray(value)
-	) {
-		return false; 
-	}
+  if (Array.isArray(value) && value.length === 0 ||
+  isObjectEmpty(value) || !Array.isArray(value)
+  ) {
+    return false; 
+  }
 
   if (Array.isArray(value)) {
     return value.some((val) => hasKeys(val, target));
@@ -40,11 +40,11 @@ const hasKeys = (value, target) => {
 };
 
 const hasValues = (value, target) => {
-	if (Array.isArray(value) && value.length === 0 ||
-	isObjectEmpty(value) || !Array.isArray(value)
-	) {
-		return false; 
-	}
+  if (Array.isArray(value) && value.length === 0 ||
+  isObjectEmpty(value) || !Array.isArray(value)
+  ) {
+    return false; 
+  }
 
   if (Array.isArray(value)) {
     return value.some((val) => hasValues(val, target));

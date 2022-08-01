@@ -20,7 +20,6 @@ class TestRunner {
 
   async run() {
     const response = await this.httpRequest();
-		console.log('response ====>>', response);
     const results = this.testConfiguration.checkAssertions(response);
     return {
       status: response.status,

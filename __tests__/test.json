@@ -36,7 +36,7 @@
           "comparison": "contains",
           "target": "_id"
         },
-				{
+        {
           "type": "body",
           "property": "$[0].title",
           "comparison": "equalTo",
