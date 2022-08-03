@@ -188,25 +188,21 @@ class TestConfiguration {
         result = actualValue === targetValue;
         break;
       case 'contains':
-        if (typeof actualValue === 'boolean') {
-          result = actualValue === targetValue;
-        } else if (!actualValue || typeof actualValue === 'number') {
-          result = false;
+        if (typeof actualValue === 'object' && actualValue !== null) {
+          result = helpers.containsKeysOrVals(actualValue, targetValue);
         } else if (typeof actualValue === 'string') {
           result = actualValue.includes(targetValue);
         } else {
-          result = helpers.containsKeysOrVals(actualValue, targetValue);
+          result = String(actualValue) === targetValue;
         }
         break;
       case 'notContains':
-        if (typeof actualValue === 'boolean') {
-          result = actualValue !== targetValue;
-        } else if (!actualValue || typeof actualValue === 'number') {
-          result = false;
+        if (typeof actualValue === 'object' && actualValue !== null) {
+          result = !helpers.containsKeysOrVals(actualValue, targetValue);
         } else if (typeof actualValue === 'string') {
           result = !actualValue.includes(targetValue);
         } else {
-          result = !helpers.containsKeysOrVals(actualValue, targetValue);
+          result = String(actualValue) !== targetValue;
         }
         break;
       case 'greaterThanOrEqualTo':
@@ -218,18 +214,33 @@ class TestConfiguration {
         result = actualValue <= targetValue;
         break;
       case 'hasKey':
+        if (typeof value !== 'object' || value === null) {
+          return false;
+        }
         result = helpers.hasKeys(actualValue, targetValue);
         break;
       case 'notHasKey':
+        if (typeof value !== 'object' || value === null) {
+          return true;
+        }
         result = !helpers.hasKeys(actualValue, targetValue);
         break;
       case 'hasValue':
+        if (typeof actualValue !== 'object' || actualValue === null) {
+          return false;
+        }
         result = helpers.hasValues(actualValue, targetValue);
         break;
       case 'notHasValue':
-        result = helpers.hasValues(actualValue, targetValue);
+        if (typeof actualValue !== 'object' || actualValuevalue === null) {
+          return true;
+        }
+        result = !helpers.hasValues(actualValue, targetValue);
         break;
       case 'isEmpty':
+        if (typeof actualValue !== 'object' || actualValue === null) {
+          return false;
+        }
         if (Array.isArray(actualValue)) {
           result = actualValue.length === 0;
         } else if (actualValue === null) {
@@ -241,6 +252,9 @@ class TestConfiguration {
         }
         break;
       case 'isNotEmpty':
+        if (typeof actualValue !== 'object' || actualValue === null) {
+          return false;
+        }
         if (Array.isArray(actualValue)) {
           result = actualValue.length !== 0;
         } else if (actualValue === null) {

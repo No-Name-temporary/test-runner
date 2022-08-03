@@ -6,7 +6,8 @@
   "scripts": {
     "locally": "node -e \"console.log(require('./index').handler(require('./event.json')));\"",
     "zip": "zip -r test-runner-sqs.zip .",
-    "lint": "./node_modules/.bin/eslint ."
+    "lint": "./node_modules/.bin/eslint .",
+    "test": "jest --verbose ./__tests__"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "eslint": "^8.19.0",
-    "eslint-config-airbnb": "^19.0.4"
+    "eslint-config-airbnb": "^19.0.4",
+    "jest": "^28.1.3"
   }
 }
