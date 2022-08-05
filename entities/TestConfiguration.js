@@ -11,6 +11,7 @@ class TestConfiguration {
     this.method = httpRequest.method;
     this.url = httpRequest.url;
     this.body = httpRequest.body;
+    this.headers = httpRequest.headers;
     this.assertions = httpRequest.assertions;
   }
 
