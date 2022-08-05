@@ -4,7 +4,9 @@
   "description": "Contains code and libraries for test runner Lambda",
   "main": "index.js",
   "scripts": {
-    "locally": "node -e \"console.log(require('./index').handler(require('./event.json')));\"",
+    "locally": "node -e \"console.log(require('./index').handler(require('./event-tests/event.json')));\"",
+    "locally-github": "node -e \"console.log(require('./index').handler(require('./event-tests/event-req-github.json')));\"",
+    "locally-coin": "node -e \"console.log(require('./index').handler(require('./event-tests/event-req-coin-api.json')));\"",
     "zip": "zip -r test-runner-sqs.zip .",
     "lint": "./node_modules/.bin/eslint .",
     "test": "jest --verbose ./__tests__"
