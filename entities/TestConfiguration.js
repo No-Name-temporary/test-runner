@@ -183,10 +183,10 @@ class TestConfiguration {
         result = actualValue > targetValue;
         break;
       case 'notEqualTo':
-        result = actualValue !== targetValue;
+        result = String(actualValue) !== String(targetValue);
         break;
       case 'equalTo':
-        result = actualValue === targetValue;
+        result = String(actualValue) === String(targetValue);
         break;
       case 'contains':
         if (typeof actualValue === 'object' && actualValue !== null) {
